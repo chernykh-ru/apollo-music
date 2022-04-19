@@ -19,8 +19,7 @@ const AddSong: FC = () => {
   }
 
   return (
-    <Box
-      sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px', paddingLeft: '20px', paddingRight: '20px' }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px', px: '20px' }}>
       <Dialog sx={{ textAlign: 'center' }} open={dialog} onClose={handleCloseDialog}>
         <DialogTitle>Edit Song</DialogTitle>
         <DialogContent>
