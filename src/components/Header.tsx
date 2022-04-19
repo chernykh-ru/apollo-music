@@ -8,9 +8,9 @@ const Header: FC = () => {
       <Toolbar>
         <HeadsetTwoToneIcon />
         <Typography
-          sx={{
-            marginLeft: 2,
-          }}
+          sx={(theme) => ({
+            marginLeft: theme.spacing(2),
+          })}
           variant='h6'
           component='h1'>
           Apollo Music
