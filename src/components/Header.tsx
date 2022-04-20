@@ -4,7 +4,7 @@ import HeadsetTwoToneIcon from '@mui/icons-material/HeadsetTwoTone';
 
 const Header: FC = () => {
   return (
-    <AppBar position='static'>
+    <AppBar color='primary' position='static' enableColorOnDark>
       <Toolbar>
         <HeadsetTwoToneIcon />
         <Typography

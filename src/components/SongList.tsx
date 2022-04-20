@@ -3,13 +3,13 @@ import { Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton
 import { Box } from '@mui/system';
 import React, { FC, useState } from 'react';
 
-interface ISong {
+export interface ISong {
   title: string;
   artist: string;
   thumbnail: string;
 }
 
-interface ISongCardProps {
+export interface ISongCardProps {
   song: ISong;
 }
 
