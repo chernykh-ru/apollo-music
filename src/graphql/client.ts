@@ -1,7 +1,6 @@
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { GET_QUEUED_SONGS } from './queries'
-// import { WebSocketLink } from 'apollo-link-ws'
 import { ISong } from '../types'
 
 // Mutation enables to add/remove items from the queue
@@ -114,15 +113,5 @@ client.writeQuery({
     queue: hasQueue ? JSON.parse(localStorage.getItem('queue') || '{}') : [],
   },
 })
-
-//old https client
-// const client = new ApolloClient({
-//   uri: 'https://apollo-music-gql.hasura.app/v1/graphql',
-//   cache: new InMemoryCache(),
-//   headers: {
-//     'content-type': 'application/json',
-//     'x-hasura-admin-secret': 'ADD_YOUR_ADMIN_SECRET',
-//   },
-// })
 
 export default client
