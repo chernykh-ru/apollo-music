@@ -1,14 +1,29 @@
 import { gql } from '@apollo/client'
 
-export const GET_SONGS = gql`
-  query getSong {
-    songs(order_by: { created_at: desc }) {
-      artist
-      duration
+// @client annotation tells apollo to perform this query only on the client query
+
+export const GET_QUEUED_SONGS = gql`
+  query getQueuedSongs {
+    queue @client {
       id
-      thumbnail
+      duration
       title
+      artist
+      thumbnail
       url
     }
   }
 `
+
+// export const GET_SONGS = gql`
+//   query getSong {
+//     songs(order_by: { created_at: desc }) {
+//       artist
+//       duration
+//       id
+//       thumbnail
+//       title
+//       url
+//     }
+//   }
+// `

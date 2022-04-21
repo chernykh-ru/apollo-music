@@ -1,4 +1,4 @@
-import { useSubscription } from '@apollo/client'
+import { useMutation, useSubscription } from '@apollo/client'
 import { PlayArrow, Save } from '@mui/icons-material'
 import {
   Card,
@@ -10,16 +10,52 @@ import {
   Typography,
 } from '@mui/material'
 import { Box } from '@mui/system'
-import React, { FC } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import { ISong, ISongData } from '../types'
 import { GET_SONGS } from '../graphql/subscriptions'
+import { ISongContext, SongContext } from '../context'
+import { Pause } from '@mui/icons-material'
+import { ActionSong } from '../reduser'
+import { ADD_OR_REMOVE_FROM_QUEUE } from '../graphql/mutations'
 
-export interface ISongCardProps {
+export interface ISongProps {
   song: ISong
 }
 
-const SongCard: FC<ISongCardProps> = ({ song }) => {
-  const { title, artist, thumbnail } = song
+const Song: FC<ISongProps> = ({ song: songProp }) => {
+  const { song, isPlaying, dispatch } = useContext(SongContext) as ISongContext
+  const [currentSongPlaying, setCurrentSongPlaying] = useState<boolean>(false)
+  const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE, {
+    onCompleted: (data) => {
+      localStorage.setItem('queue', JSON.stringify(data.addOrRemoveFromQueue))
+    },
+  })
+  const { title, artist, thumbnail, id } = songProp
+
+  useEffect(() => {
+    const isSongPlaying = isPlaying && id === song.id
+    setCurrentSongPlaying(isSongPlaying)
+  }, [id, song.id, isPlaying])
+
+  const handleTogglePlay = () => {
+    if (!currentSongPlaying) {
+      dispatch({ type: ActionSong.PlaySong })
+      dispatch({ type: ActionSong.SetSong, payload: songProp })
+    }
+    if (currentSongPlaying) {
+      dispatch({ type: isPlaying ? ActionSong.PauseSong : ActionSong.PlaySong })
+    }
+    // dispatch({ type: ActionSong.SetSong, payload: songProp })
+    // dispatch({ type: isPlaying ? ActionSong.PauseSong : ActionSong.PlaySong })
+  }
+
+  const handleAddOrRemoveFromQueue = () => {
+    addOrRemoveFromQueue({
+      variables: {
+        input: { ...songProp, __typename: 'Song' },
+      },
+    })
+  }
 
   return (
     <Card
@@ -50,10 +86,18 @@ const SongCard: FC<ISongCardProps> = ({ song }) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <IconButton size='small' color='primary'>
-              <PlayArrow aria-label='play/pause' />
+            <IconButton onClick={handleTogglePlay} size='small' color='primary'>
+              {currentSongPlaying ? (
+                <Pause aria-label='play/pause' />
+              ) : (
+                <PlayArrow aria-label='play/pause' />
+              )}
             </IconButton>
-            <IconButton size='small' color='secondary'>
+            <IconButton
+              onClick={handleAddOrRemoveFromQueue}
+              size='small'
+              color='secondary'
+            >
               <Save aria-label='save' />
             </IconButton>
           </CardActions>
@@ -87,7 +131,7 @@ const SongList: FC = () => {
 
   return (
     <Box>
-      {data && data.songs.map((song) => <SongCard key={song.id} song={song} />)}
+      {data && data.songs.map((song) => <Song key={song.id} song={song} />)}
     </Box>
   )
 }
