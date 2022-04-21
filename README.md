@@ -10,16 +10,16 @@ Enjoy 🎶🎵🎶🎵🎶
 
 ![Apollo Music Demo](src/images/demo.gif)
 
-## Стек:
+## Stack:
 
-React 18, Apollo GraphQL, react-player, MUI 5.
+React 18, Apollo GraphQL, WebSocket, react-player, MUI 5.
 
-## Язык: TypeScript.
+## TypeScript.
 
 ## Layout:
 
 Figma & MUI
 
-## Линтинг:
+## Linting:
 
 ESLint & Stylelint.
