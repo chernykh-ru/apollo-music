@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/apollo-music/static/js/main.2576b62e.js",
+    "index.html": "/apollo-music/index.html",
+    "main.2576b62e.js.map": "/apollo-music/static/js/main.2576b62e.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.2576b62e.js"
+  ]
+}
