@@ -1,40 +1,46 @@
-import { PlayArrow, Save } from '@mui/icons-material';
-import { Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import React, { FC, useState } from 'react';
-
-export interface ISong {
-  title: string;
-  artist: string;
-  thumbnail: string;
-}
+import { useQuery } from '@apollo/client'
+import { PlayArrow, Save } from '@mui/icons-material'
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from '@mui/material'
+import { Box } from '@mui/system'
+import React, { FC } from 'react'
+import { ISong, ISongData } from '../types'
+import { GET_SONGS } from '../graphql/queries'
 
 export interface ISongCardProps {
-  song: ISong;
+  song: ISong
 }
 
-const songDummyData = {
-  title: 'grape soda',
-  artist: 'Rook1e',
-  thumbnail: 'https://i1.sndcdn.com/artworks-000420225600-nnpr1a-t500x500.jpg',
-};
-
 const SongCard: FC<ISongCardProps> = ({ song }) => {
-  const { title, artist, thumbnail } = song;
+  const { title, artist, thumbnail } = song
 
   return (
     <Card
       sx={(theme) => ({
         margin: theme.spacing(3),
-      })}>
+      })}
+    >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <CardMedia
-          sx={{ objectFit: 'cover', width: '140px' }}
+          sx={{ objectFit: 'cover', width: '140px', height: '140px' }}
           image={thumbnail}
           component='img'
           alt='Live from space album cover'
         />
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <CardContent>
             <Typography gutterBottom variant='h5' component='h2'>
               {title}
@@ -54,12 +60,11 @@ const SongCard: FC<ISongCardProps> = ({ song }) => {
         </Box>
       </Box>
     </Card>
-  );
-};
+  )
+}
 
 const SongList: FC = () => {
-  const [songCards, setSongCards] = useState<ISong[]>(new Array(7).fill(songDummyData));
-  const [loading, setLoading] = useState<boolean>(false);
+  const { loading, error, data } = useQuery<ISongData>(GET_SONGS)
 
   if (loading) {
     return (
@@ -69,19 +74,22 @@ const SongList: FC = () => {
           flexDirection: 'column',
           alignItems: 'center',
           marginTop: '50px',
-        }}>
+        }}
+      >
         <CircularProgress />
       </Box>
-    );
+    )
+  }
+
+  if (error) {
+    return <div>{`Error fetching songs: >>> ${error.message}`}</div>
   }
 
   return (
     <Box>
-      {songCards.map((song, i) => (
-        <SongCard key={i} song={song} />
-      ))}
+      {data && data.songs.map((song) => <SongCard key={song.id} song={song} />)}
     </Box>
-  );
-};
+  )
+}
 
-export default SongList;
+export default SongList
