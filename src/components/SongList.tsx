@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useSubscription } from '@apollo/client'
 import { PlayArrow, Save } from '@mui/icons-material'
 import {
   Card,
@@ -12,7 +12,7 @@ import {
 import { Box } from '@mui/system'
 import React, { FC } from 'react'
 import { ISong, ISongData } from '../types'
-import { GET_SONGS } from '../graphql/queries'
+import { GET_SONGS } from '../graphql/subscriptions'
 
 export interface ISongCardProps {
   song: ISong
@@ -64,7 +64,7 @@ const SongCard: FC<ISongCardProps> = ({ song }) => {
 }
 
 const SongList: FC = () => {
-  const { loading, error, data } = useQuery<ISongData>(GET_SONGS)
+  const { loading, error, data } = useSubscription<ISongData>(GET_SONGS)
 
   if (loading) {
     return (
